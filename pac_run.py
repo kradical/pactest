@@ -1,5 +1,6 @@
 from pac_class import Maze
 import sys
+import time
 
 
 def main():
@@ -12,6 +13,14 @@ def main():
         print(sys.argv[1] + ' not found.')
         sys.exit()
     main_maze.print_maze()
+    print(main_maze.pacman.x, main_maze.pacman.y)
+    
+    while main_maze.live:
+        time.sleep(1)
+        for ghost in main_maze.ghosts:
+            ghost.move()
+        main_maze.pacman.move()
+        main_maze.print_maze()
     
 if __name__ == '__main__':
     main()

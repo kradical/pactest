@@ -1,26 +1,39 @@
+from enum import Enum
+
+class GameComponents(Enum):
+    food = '*'
+    wall = '#'
+    pacman = 'P'
+    shadow = 's'
+
 class Maze:
     def __init__(self, input_filename):
         # must be a valid maze
         self.maze = self.read_input(input_filename)
         self.graph = Graph(self.maze)
-        # self.pacman = Pacman(self.graph)
-        # self.ghost = Ghost(self.graph)
+        self.pacman = Pacman(self.graph)
+        self.ghosts = [Shadow(self.graph)]
+        self.live = True
     
     def read_input(self, file_name):
         with open(file_name, 'r') as fp:
             # TODO validate it is a well formed maze
-            return [[x for x in line.strip()] for line in fp]
+            # TODO error no pacman or ghosts!!
+            result = []
+            for row in fp:
+                row_result = []
+                for cell in row.strip():
+                    row_result.append(GameComponents(cell))
+                result.append(row_result)
+            return result
             
     def print_maze(self):
-        maze_str = '\n'.join([''.join(x) for x in self.maze])
-        print(maze_str, end='\n\n')
+        print('\n'.join([''.join(map(lambda x:x.value, row)) for row in self.maze]) + '\n\n')
         
 class Graph:
     def __init__(self, maze):
         self.nodes = self.initnodes(maze)
         self.edges = self.initedges(maze)
-        for edge in self.edges:
-            print(edge)
     
     def initedges(self, maze):
         result = []
@@ -45,7 +58,7 @@ class Graph:
         result = []
         for j, row in enumerate(maze):
             for i, cell in enumerate(row):
-                if cell != '#':
+                if cell != GameComponents.wall:
                     result.append(Node(i, j, cell))
         return result
 
@@ -56,20 +69,22 @@ class Edge:
         
 class Node:
     def __init__(self, x, y, value):
-        self.value = value
+        self.game_piece = value
         self.x = x
         self.y = y
-       
-class Ghost:
-    def __init__(self, maze):
-        for i, row in enumerate(maze):
-            if 'G' in row:
-                self.x = i
-                self.y = row.index('G')    
-    
+
+# eventually extend to all the pacman ghosts 
+# shadow chases pacman directly       
+class Shadow:
+    def __init__(self, graph):
+        for node in graph.nodes:
+            if node.game_piece == GameComponents.shadow:
+                self.x = node.x
+                self.y = node.y
+                self.standing_on = GameComponents.food
 class Pacman:
-    def __init__(self, maze):
-        for i, row in enumerate(maze):
-            if 'P' in row:
-                self.x = i
-                self.y = row.index('P')
+    def __init__(self, graph):
+        for node in graph.nodes:
+            if node.game_piece == GameComponents.pacman:
+                self.x = node.x
+                self.y = node.y
