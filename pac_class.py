@@ -82,9 +82,16 @@ class Shadow:
                 self.x = node.x
                 self.y = node.y
                 self.standing_on = GameComponents.food
+
+    def move(self):
+        print("SMOVING")
+
 class Pacman:
     def __init__(self, graph):
         for node in graph.nodes:
             if node.game_piece == GameComponents.pacman:
                 self.x = node.x
                 self.y = node.y
+
+    def move(self, user_move):
+        user_move()

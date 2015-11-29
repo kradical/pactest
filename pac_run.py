@@ -19,8 +19,8 @@ def main():
         time.sleep(1)
         for ghost in main_maze.ghosts:
             ghost.move()
-        main_maze.pacman.move()
+        main_maze.pacman.move(lambda: print("PMOVING") )
         main_maze.print_maze()
-    
+
 if __name__ == '__main__':
     main()
