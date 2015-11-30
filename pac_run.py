@@ -1,4 +1,4 @@
-from pac_class import Maze
+from pac_class import Maze, Shadow, PacMan
 import sys
 import time
 
@@ -12,15 +12,21 @@ def main():
     except FileNotFoundError:
         print(sys.argv[1] + ' not found.')
         sys.exit()
+
+    ghosts = [Shadow(main_maze.values)]
+    player1 = PacMan(main_maze.values)
     main_maze.print_maze()
-    print(main_maze.pacman.x, main_maze.pacman.y)
     
     while main_maze.live:
         time.sleep(1)
-        for ghost in main_maze.ghosts:
-            ghost.move()
-        main_maze.pacman.move(lambda: print("PMOVING") )
+        player1.move(player_move)
+        for ghost in ghosts:
+            ghost.move(main_maze)
         main_maze.print_maze()
+
+
+def player_move():
+    pass
 
 if __name__ == '__main__':
     main()
