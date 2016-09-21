@@ -17,7 +17,7 @@ class Maze:
         self.read_input(input_filename)
         self.graph = Graph(self.values, self.xlen, self.ylen)
         self.live = True
-    
+
     def read_input(self, file_name):
         with open(file_name, 'r') as fp:
             # TODO validate it is a well formed maze
@@ -31,7 +31,7 @@ class Maze:
                     self.values.append(GameComponents(char))
                 if current_line_len > self.xlen:
                     self.xlen = current_line_len
-            
+
     def print_maze(self):
         maze_string = ''.join(map(lambda x: x.value, self.values))
         print('\n'.join(maze_string[i:i+self.xlen] for i in range(0, len(maze_string), self.xlen)), end='\n\n')
@@ -51,8 +51,8 @@ class Graph:
                         self.adj[ndx].append(neighbour)
 
 
-# eventually extend to all the pacman ghosts 
-# shadow chases pacman directly       
+# eventually extend to all the pacman ghosts
+# shadow chases pacman directly
 class Shadow:
     def __init__(self, maze_values):
         self.location = maze_values.index(GameComponents.shadow)
@@ -60,7 +60,7 @@ class Shadow:
 
     def move(self, maze):
         dist = [float('inf') for x in maze.values]
-        parent = [None for x in maze.value]
+        parent = [None for x in maze.values]
 
         node_queue = []
 
